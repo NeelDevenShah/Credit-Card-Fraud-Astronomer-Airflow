@@ -2,10 +2,10 @@ import pandas as pd
 from sklearn.svm import SVC
 import joblib
 
-def train_model():
+def train_model(x_path='/tmp/X.csv', y_path='/tmp/y.csv'):
     # Load preprocessed data
-    X = pd.read_csv('/tmp/X.csv')
-    y = pd.read_csv('/tmp/y.csv')
+    X = pd.read_csv(x_path)
+    y = pd.read_csv(y_path)
 
     # Train the SVM model
     model = SVC(probability=True)

@@ -2,11 +2,11 @@ import pandas as pd
 import joblib
 from sklearn.metrics import accuracy_score
 
-def evaluate_models():
-    X_test = pd.read_csv('/tmp/X_test.csv')
-    y_test = pd.read_csv('/tmp/y_test.csv')
+def evaluate_models(x_test_path='/tmp/X_test.csv', y_test_path='/tmp/y_test.csv', best_model_write_path='/tmp/best_model.txt'):
+    X_test = pd.read_csv(x_test_path)
+    y_test = pd.read_csv(y_test_path)
 
-    model_files = ['/tmp/model_rf.pkl', '/tmp/model_svm.pkl', '/tmp/model_xgb.pkl', '/tmp/model_nn.pkl']
+    model_files = ['/tmp/model_rf.pkl', '/tmp/model_svm.pkl', '/tmp/model_xgb.pkl']
     best_accuracy = 0
     best_model_file = ""
 
@@ -20,5 +20,5 @@ def evaluate_models():
             best_model_file = model_file
 
     # Save best model info
-    with open('/tmp/best_model.txt', 'w') as f:
+    with open(best_model_write_path, 'w') as f:
         f.write(best_model_file)

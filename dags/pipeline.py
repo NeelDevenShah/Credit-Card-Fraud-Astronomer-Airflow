@@ -6,10 +6,8 @@ from scripts.download_data import download_data, preprocess_data
 from scripts.train_model_rf import train_model as train_model_rf
 from scripts.train_model_svm import train_model as train_model_svm
 from scripts.train_model_xgb import train_model as train_model_xgb
-# from scripts.train_model_nn import train_model as train_model_nn
 from scripts.evaluate_models import evaluate_models
-# from scripts.deploy_container import deploy_best_model
-    
+
 # Default arguments
 default_args = {
     'owner': 'airflow',
@@ -29,48 +27,41 @@ with DAG(
     download_data_task = PythonOperator(
         task_id='download_data',
         python_callable=download_data,
+        op_kwargs={'LOCAL_DATA_PATH':"/tmp/creditcard.txt", 'container_client_name': 'gold-data-creditcard', 'blob_name': 'data.zip/creditcard.txt', 'connection_string': 'BlobEndpoint=https://newexperiment.blob.core.windows.net/;QueueEndpoint=https://newexperiment.queue.core.windows.net/;FileEndpoint=https://newexperiment.file.core.windows.net/;TableEndpoint=https://newexperiment.table.core.windows.net/;SharedAccessSignature=sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2024-12-17T05:04:09Z&st=2024-12-06T21:04:09Z&spr=https,http&sig=zNTxF2JJ8IwSxauhs7RflhzHLmQ5hMgWOQj0wXn07kU%3D'}
     )
 
     # Preprocessing Task
     preprocess_data_task = PythonOperator(
         task_id='preprocess_data',
         python_callable=preprocess_data,
+        op_kwargs={'LOCAL_DATA_PATH': "/tmp/creditcard.txt", 'x_path': '/tmp/X.csv', 'y_path': '/tmp/y.csv', 'x_test_path': '/tmp/X_test.csv', 'y_test_path': '/tmp/y_test.csv'}
     )
 
     # Train models in parallel
     train_rf_task = PythonOperator(
         task_id='train_random_forest',
         python_callable=train_model_rf,
+        op_kwargs={'x_path': '/tmp/X.csv', 'y_path': '/tmp/y.csv'}
     )
 
     train_svm_task = PythonOperator(
         task_id='train_svm',
         python_callable=train_model_svm,
+        op_kwargs={'x_path': '/tmp/X.csv', 'y_path': '/tmp/y.csv'}
     )
 
     train_xgb_task = PythonOperator(
         task_id='train_xgboost',
         python_callable=train_model_xgb,
+        op_kwargs={'x_path': '/tmp/X.csv', 'y_path': '/tmp/y.csv'}
     )
-
-    # train_nn_task = PythonOperator(
-    #     task_id='train_neural_network',
-    #     python_callable=train_model_nn,
-    # )
 
     # Evaluate and select the best model
     evaluate_models_task = PythonOperator(
         task_id='evaluate_models',
         python_callable=evaluate_models,
+        op_kwargs={'x_test_path': '/tmp/X_test.csv', 'y_test_path': '/tmp/y_test.csv', 'best_model_write_path': '/tmp/best_model.txt'}
     )
-
-    # Deploy the best model to Azure Container Apps
-    # deploy_best_model_task = PythonOperator(
-    #     task_id='deploy_best_model',
-    #     python_callable=deploy_best_model,
-    # )
 
     # Task Dependencies
     download_data_task >> preprocess_data_task >> [train_rf_task, train_svm_task, train_xgb_task] >> evaluate_models_task
-    
-    # >> deploy_best_model_task
