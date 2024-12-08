@@ -3,7 +3,7 @@ from azure.identity import DefaultAzureCredential
 from azure.mgmt.containerapp import ContainerAppsManagementClient
 
 def deploy_best_model():
-    with open('/tmp/best_model.txt', 'r') as f:
+    with open('tmp/best_model.txt', 'r') as f:
         best_model_file = f.read().strip()
 
     # Prepare Docker image
