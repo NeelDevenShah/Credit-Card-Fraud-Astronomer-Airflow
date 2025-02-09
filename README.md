@@ -4,7 +4,7 @@
 
 This repository contains an Apache Airflow pipeline for Credit Card Fraud Detection. The pipeline automates the end-to-end machine learning workflow, from data ingestion to model training, evaluation, and deployment to the cloud.
 
-![Airflow]('./assets/airflow.png')
+![Airflow](assets/airflow.png)
 
 ## Features
 
@@ -27,7 +27,7 @@ The workflow is orchestrated using Apache Airflow DAG and follows this sequence:
 
 ## DAG Workflow Diagram
 
-![DAG Diagaram]('./assets/Pi7_Screenshot from 2024-12-09 02-12-18.png')
+![DAG Diagaram](assets/Pi7_Screenshot_from_2024-12-09_02-12-18.png)
 
 ## File Structure
 
@@ -149,8 +149,8 @@ To deploy the Airflow DAG in Azure Container Apps, follow these steps:
 
 ## Monitoring & Debugging
 
-![Pipeline Running Status]('./assets/Pi7_Screenshot from 2024-12-09 02-48-50.png')
-![Pipeline Stats]('./assets/Pi7_Screenshot from 2024-12-09 02-13-30.png')
+![Pipeline Running Status](assets/Pi7_Screenshot_from_2024-12-09_02-48-50.png)
+![Pipeline Stats](assets/Pi7_Screenshot_from_2024-12-09_02-13-30.png)
 
 ### Airflow UI Screenshots
 
